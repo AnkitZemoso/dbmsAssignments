@@ -1,0 +1,6 @@
+select distinct city,state,zip from customer;
+select empname,department,phone,email from employee where phone like '3-%';
+select * from resourcetbl where rate between 10 and 20 order by rate;
+select eventno, dateauth, status from eventrequest where status in ('Approved','Denied') and EXTRACT(MONTH FROM dateauth) = 07 and EXTRACT(YEAR from dateauth)=2018;
+select locno,locname from location where facno in (select facno from facility where facname like 'Basketball arena');
+select planno,count(lineno),sum(numberFld) from eventplanline group by planno having count(lineno)>=1;

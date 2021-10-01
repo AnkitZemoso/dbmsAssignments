@@ -1,0 +1,63 @@
+use sakila;
+
+-- Find out the number of documentaries with deleted scenes.
+
+select COUNT(f.film_id) 
+from film f,film_category fc,category c
+where f.film_id=fc.film_id and
+fc.category_id=c.category_id and
+c.name='documentary' and 
+f.special_features='Deleted Scenes';
+
+-- Find out the number of sci-fi movies rented by the store managed by Jon Stephens.
+
+select COUNT(f.film_id) 
+from film f,film_category fc,category c,rental r,inventory i,store s,staff st
+where f.film_id=fc.film_id and
+fc.category_id=c.category_id and
+c.name='sci-fi' and 
+f.film_id=i.film_id and
+i.inventory_id=r.inventory_id and 
+i.store_id=s.store_id and 
+s.store_id=st.store_id and
+st.first_name='Jon' and 
+st.last_name='Stephens';
+
+-- Find out the total sales from Animation movies.
+
+select sum(amount) as "Total_Amount"
+from film f,film_category fc,category c,inventory i,rental r,payment p 
+where f.film_id=fc.film_id and
+fc.category_id=c.category_id and
+c.name='Animation' and 
+f.film_id=i.film_id and
+i.inventory_id=r.inventory_id and 
+p.rental_id=r.rental_id;
+
+
+-- Find out the top 3 rented category of movies by “PATRICIA JOHNSON”
+
+select c.name,count(c.name)
+from film f,inventory i,film_category fc,category c,rental r,customer cu 
+where f.film_id=fc.film_id and
+fc.category_id=c.category_id and
+f.film_id=i.film_id and
+i.inventory_id=r.inventory_id and
+cu.customer_id=r.customer_id and
+cu.first_name='PATRICIA' and 
+cu.last_name='JOHNSON'
+group by c.name
+order by count(c.name) desc limit 3;
+
+-- Find out the number of R rated movies rented by “SUSAN WILSON”.
+
+select count(f.film_id) 
+from film f,inventory i,rental r,customer cu 
+where f.film_id=i.film_id and
+f.rating='R' and
+i.inventory_id=r.inventory_id and
+cu.customer_id=r.customer_id and
+cu.first_name='SUSAN' and
+cu.last_name='WILSON';
+
+

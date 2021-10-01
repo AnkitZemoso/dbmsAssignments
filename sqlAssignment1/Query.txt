@@ -1,0 +1,61 @@
+-- Find out the PG-13 rated comedy movies. DO NOT use the film_list table.
+
+select title,rating 
+from film f,film_category fc,category c 
+where f.film_id=fc.film_id and
+fc.category_id=c.category_id
+and rating='PG-13' and c.name='Comedy';
+
+-- Find out the top 3 rented horror movies.
+
+select title,COUNT(title)
+from film f,film_category fc,category c,rental r,inventory i
+where f.film_id=fc.film_id and
+fc.category_id=c.category_id and
+f.film_id=i.film_id and 
+r.inventory_id=i.inventory_id
+and c.name='Horror' 
+group by title 
+order by count(title) desc limit 3; 
+
+-- Find out the list of customers from India who have rented sports movies.
+
+select distinct first_name,last_name 
+from film f,film_category fc,category c,rental r,inventory i,customer cu, address ad,city ci,country co
+where f.film_id=fc.film_id and
+fc.category_id=c.category_id and
+f.film_id=i.film_id and 
+r.inventory_id=i.inventory_id and
+cu.customer_id=r.customer_id and
+cu.address_id=ad.address_id and
+ci.city_id=ad.city_id and
+ci.country_id=co.country_id and
+c.name='Sports' and 
+co.country='India';
+
+--  Find out the list of customers from Canada who have rented “NICK WAHLBERG” movies.
+
+select distinct cu.first_name,cu.last_name
+from film f,film_category fc,category c,rental r,inventory i,customer cu, address ad,city ci,country co,film_actor fa,actor ac
+where f.film_id=fc.film_id and
+fc.category_id=c.category_id and
+f.film_id=i.film_id and 
+r.inventory_id=i.inventory_id and
+cu.customer_id=r.customer_id and
+cu.address_id=ad.address_id and
+ci.city_id=ad.city_id and
+ci.country_id=co.country_id and
+fa.film_id=f.film_id and
+ac.actor_id=fa.actor_id and
+co.country='Canada' and 
+ac.first_name='NICK' and
+ac.last_name='WAHLBERG';
+
+-- Find out the number of movies in which “SEAN WILLIAMS” acted.
+
+select ac.first_name,ac.last_name,COUNT(ac.actor_id) as "Number Of Movies"
+from film f ,film_actor fa,actor ac
+where f.film_id=fa.film_id and 
+fa.actor_id=ac.actor_id and 
+ac.first_name='SEAN' and 
+ac.last_name='WILLIAMS';
